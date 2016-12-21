@@ -88,8 +88,12 @@ DeployR: web service development kit through APIs, java, js, .net
 ### Create a local directory to save XDF
 
 ```{r}
-your_name <- "alizaidi"
+library(dplyrXdf)
+your_name <- "thor"
 your_dir <- paste0('/datadrive/', your_name)
+
+#set temp directory to your_dir [Optional]
+setXdfTblDir(your_dir)
 # File Path to your Data
 your_data <- file.path(your_dir, 'tripdata_2015.xdf')
 dir.create(your_dir)
@@ -100,7 +104,7 @@ download.file("http://alizaidi.blob.core.windows.net/training/yellow_tripdata_20
 ## Create a Pointer to XDF
 
 ```{r}
-library(dplyrXdf)
+
 taxi_xdf <- RxXdfData(your_data)
 taxi_xdf %>% head
 taxi_xdf %>% nrow
@@ -125,7 +129,7 @@ by using the `rxDataStep` function in the `RevoScaleR` package included with you
 ---
 
 ```{r}
-taxi_xdf %>% rxGetInfo(getVarInfo = TRUE, numRows = 4)
+taxi_xdf %>% rxGetInfo(getVarInfo = TRUE, numRows = 4) #summary function in R
 ```
 
 ---

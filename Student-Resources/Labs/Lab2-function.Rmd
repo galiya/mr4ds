@@ -230,10 +230,12 @@ In this exercise, take the `lapply` function, and use `est_lm_hood` as the "func
 
 ```{r}
 
-models <- lapply(indep_vars, est_lm_nhood)
-
+models <- lapply(c("Midtown", "East Village"), est_lm_nhood, model_form = make_formula())
 ```
 
+```{r}
+models
+```
 
 
 # Debugging
@@ -252,6 +254,7 @@ Let's say we use an incorrect column name inside of `lapply` in the chunk above:
 lapply(c("tp_amount", "fare_amount"), summarise_col)
 
 debugonce(summarise_col)
+
 lapply(c("tp_amount", "fare_amount"), summarise_col)
 
 ```

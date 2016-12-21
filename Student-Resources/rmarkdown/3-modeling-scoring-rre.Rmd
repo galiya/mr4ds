@@ -274,8 +274,8 @@ if(file.exists("scored.xdf")) file.remove('scored.xdf')
 
 default_logit_scored <- rxPredict(default_model_logit,
                                    mort_split$validate,
-                                   "scored.xdf",
-                                  writeModelVars = TRUE, 
+                                   "scored.xdf", #difference between open-source R Predict function and MRS implementation
+                                  writeModelVars = TRUE, #not only write predictions, but also see how they came about
                                   extraVarsToWrite = "default",
                                   predVarNames = c("pred_logit_default"))
 rxGetInfo(default_logit_scored, numRows = 2)
@@ -330,9 +330,9 @@ Use the above functions and estimate a model for each of those algorithms, and a
 ## Starter code
 
 default_model_forest <- estimate_model(mort_split$train, 
-                                       model = ?,
+                                       model = rxDForest,
                                        nTree = 100,
-                                       importance = ,
+                                       importance = TRUE,
                                        ### any other args?,
                                        reportProgress = 0)
 
@@ -345,29 +345,29 @@ default_forest_scored <- rxPredict(default_model_forest,
 ## same for rxBTrees
 
 default_model_gbm <- estimate_model(mort_split$train,
-                                    model = ,
+                                    model = rxBTrees,
                                     importance = TRUE,
-                                    nTree = ,
+                                    nTree = 100,
                                     ### any other args?,
                                     reportProgress = 0)
 
 default_gbm_scored <- rxPredict(default_model_gbm,
                                   mort_split$validate,
                                  "scored.xdf",
-                                predVarNames = c("pred_gbm_default"))
+                                predVarNames = c("pred_gbm_default2"))
 
 
 
 ```
 
 ```{r, fig.width=11, fig.height = 8}
-# 
-# rxRocCurve(actualVarName = "default",
-#            predVarNames = c("pred_tree_default",
-#                             "pred_logit_default",
-#                             "pred_forest_default",
-#                             "pred_gbm_default"),
-#            data = 'scored.xdf')
+ 
+rxRocCurve(actualVarName = "default",
+           predVarNames = c("pred_tree_default",
+                            "pred_logit_default",
+                            "pred_forest_default",
+                            "pred_gbm_default2"),
+           data = 'scored.xdf')
 ```
 
 
@@ -405,7 +405,7 @@ tree_model_ccdebt <- estimate_model(xdf_data = mort_split$train,
                                                      vars_to_skip = c("default_flag",
                                                                       "trainvalidate")),
                                     model = rxDTree)
-# plot(RevoTreeView::createTreeView(tree_model_ccdebt))
+plot(RevoTreeView::createTreeView(tree_model_ccdebt))
 
 ```
 
